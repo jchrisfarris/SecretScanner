@@ -151,6 +151,39 @@ func IsSymLink(path string) bool {
 		return true
 	}
 
+	// --- check if file is a symlink
+	if fileInfo.Mode()&os.ModeDevice == os.ModeDevice {
+		// fmt.Println("File is a symbolic link")
+		return true
+	}
+
+	// --- check if file is a symlink
+	if fileInfo.Mode()&os.ModeNamedPipe == os.ModeNamedPipe {
+		// fmt.Println("File is a symbolic link")
+		return true
+	}
+
+	// --- check if file is a symlink
+	if fileInfo.Mode()&os.ModeSocket == os.ModeSocket {
+		// fmt.Println("File is a symbolic link")
+		return true
+	}
+
+	// --- check if file is a symlink
+	if fileInfo.Mode()&os.ModeIrregular == os.ModeIrregular {
+		// fmt.Println("File is a symbolic link")
+		return true
+	}
+
+	// --- check if file is a symlink
+	if fileInfo.Mode()&os.ModeCharDevice == os.ModeCharDevice {
+		// fmt.Println("File is a symbolic link")
+		return true
+	}
+
+
+
+
 	return false
 }
 

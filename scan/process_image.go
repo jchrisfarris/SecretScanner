@@ -156,6 +156,7 @@ func ScanSecretsInDir(layer string, baseDir string, fullDir string, isFirstSecre
 		// No need to scan sym links. This avoids hangs when scanning stderr, stdour or special file descriptors
 		// Also, the pointed files will anyway be scanned directly
 		if core.IsSymLink(path) {
+			session.Log.Warn("scanSecretsInDir: Skipping irregular file: %s", file.Path)
 			return nil
 		}
 
@@ -163,8 +164,8 @@ func ScanSecretsInDir(layer string, baseDir string, fullDir string, isFirstSecre
 
 		relPath, err = filepath.Rel(filepath.Join(baseDir, layer), file.Path)
 		if err != nil {
-			session.Log.Warn("scanSecretsInDir: Couldn't remove prefix of path: %s %s %s",
-				baseDir, layer, file.Path)
+			// session.Log.Warn("scanSecretsInDir: Couldn't remove prefix of path: %s %s %s",
+			// 	baseDir, layer, file.Path)
 			relPath = file.Path
 		}
 
@@ -175,6 +176,8 @@ func ScanSecretsInDir(layer string, baseDir string, fullDir string, isFirstSecre
 				session.Log.Error("scanSecretsInDir changine file permission: %s", err)
 			}
 		}
+
+		session.Log.Info("scanSecretsInDir: Scanning file: %s", file.Path)
 
 		contents, err = ioutil.ReadFile(file.Path)
 		if err != nil {
@@ -202,10 +205,10 @@ func ScanSecretsInDir(layer string, baseDir string, fullDir string, isFirstSecre
 		}
 		tempSecretsFound = append(tempSecretsFound, secrets...)
 
-		// Don't report secrets if number of secrets exceeds MAX value
-		if *numSecrets >= *session.Options.MaxSecrets {
-			return maxSecretsExceeded
-		}
+		// // Don't report secrets if number of secrets exceeds MAX value
+		// if *numSecrets >= *session.Options.MaxSecrets {
+		// 	return maxSecretsExceeded
+		// }
 		return nil
 	})
 	if walkErr != nil {
