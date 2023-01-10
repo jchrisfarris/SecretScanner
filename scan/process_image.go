@@ -151,6 +151,7 @@ func ScanSecretsInDir(layer string, baseDir string, fullDir string, isFirstSecre
 			return nil
 		}
 		if uint(f.Size()) > maxFileSize || core.IsSkippableFileExtension(path) {
+			session.Log.Info("scanSecretsInDir: skipping large file: %s (%d)", file.Path, uint(f.Size()))
 			return nil
 		}
 		// No need to scan sym links. This avoids hangs when scanning stderr, stdour or special file descriptors

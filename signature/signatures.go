@@ -261,7 +261,7 @@ func matchString(part string, input string, completeFilename string, layerID str
 
 		if signature.Match == input {
 			if core.ContainsBlacklistedString([]byte(input)) {
-				core.GetSession().Log.Debug("matchString: Skipping matches containing blacklisted strings")
+				core.GetSession().Log.Info("matchString: Skipping matches containing blacklisted strings")
 				continue
 			}
 			core.GetSession().Log.Info("Simple Signature %s %s %s %s %s %d\n", signature.Name, signature.Part,

@@ -84,7 +84,7 @@ func ContainsBlacklistedString(input []byte) bool {
 	for _, blacklistedString := range session.Config.BlacklistedStrings {
 		blacklistedByteStr := []byte(blacklistedString)
 		if bytes.Contains(input, blacklistedByteStr) {
-			GetSession().Log.Debug("Blacklisted string %s matched", blacklistedString)
+			GetSession().Log.Warn("Blacklisted string %s matched", blacklistedString)
 			return true
 		}
 	}
