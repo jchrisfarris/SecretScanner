@@ -146,18 +146,19 @@ func ScanSecretsInDir(layer string, baseDir string, fullDir string, isFirstSecre
 
 		if f.IsDir() {
 			if core.IsSkippableDir(scanDirPath, baseDir) {
+				session.Log.Info("scanSecretsInDir: skipping blacklisted dir: %s", scanDirPath)
 				return filepath.SkipDir
 			}
 			return nil
 		}
 
 		if uint(f.Size()) > maxFileSize {
-			session.Log.Info("scanSecretsInDir: skipping large file: %s (%d)", path, uint(f.Size()))
+			session.Log.Warn("scanSecretsInDir: skipping large file: %s (%d)", path, uint(f.Size()))
 			return nil
 		}
 
 		if core.IsSkippableFileExtension(path) {
-			session.Log.Info("scanSecretsInDir: skipping file due to extension: %s", path)
+			session.Log.Debug("scanSecretsInDir: skipping file due to extension: %s", path)
 			return nil
 		}
 
@@ -320,7 +321,7 @@ func (imageScan *ImageScan) saveImageData() error {
 // string - directory where contents of image are extracted
 // Error - Errors, if any. Otherwise, returns nil
 func extractTarFile(imageName, imageTarPath string, extractPath string) (string, error) {
-	core.GetSession().Log.Debug("Started extracting tar file %s", imageTarPath)
+	core.GetSession().Log.Info("Started extracting tar file %s", imageTarPath)
 
 	path := extractPath
 
