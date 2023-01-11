@@ -317,8 +317,8 @@ func processHsRegexMatch(id uint, from, to uint64, flags uint, context interface
 
 	ito := int(to)
 	core.GetSession().Log.Debug("processHsRegexMatch: %d %d %d\n", start, ito, len(hsIOData.inputData))
-	if core.ContainsBlacklistedString(hsIOData.inputDataLowerCase[start:ito]) {
-		core.GetSession().Log.Debug("processHsRegexMatch: Skipping matches containing blacklisted strings")
+	if core.ContainsBlacklistedString(hsIOData.inputData[start:ito]) {
+		core.GetSession().Log.Info("processHsRegexMatch: Skipping matches containing blacklisted strings")
 		return nil
 	}
 
