@@ -150,10 +150,17 @@ func ScanSecretsInDir(layer string, baseDir string, fullDir string, isFirstSecre
 			}
 			return nil
 		}
-		if uint(f.Size()) > maxFileSize || core.IsSkippableFileExtension(path) {
-			session.Log.Info("scanSecretsInDir: skipping large file: %s (%d)", file.Path, uint(f.Size()))
+
+		if uint(f.Size()) > maxFileSize {
+			session.Log.Info("scanSecretsInDir: skipping large file: %s (%d)", path, uint(f.Size()))
 			return nil
 		}
+
+		if core.IsSkippableFileExtension(path) {
+			session.Log.Info("scanSecretsInDir: skipping file due to extension: %s", path)
+			return nil
+		}
+
 		// No need to scan sym links. This avoids hangs when scanning stderr, stdour or special file descriptors
 		// Also, the pointed files will anyway be scanned directly
 		if core.IsSymLink(path) {
@@ -178,7 +185,7 @@ func ScanSecretsInDir(layer string, baseDir string, fullDir string, isFirstSecre
 			}
 		}
 
-		session.Log.Info("scanSecretsInDir: Scanning file: %s", file.Path)
+		session.Log.Info("scanSecretsInDir: Scanning file: %s (%d) Bytes", file.Path, uint(f.Size()))
 
 		contents, err = ioutil.ReadFile(file.Path)
 		if err != nil {
